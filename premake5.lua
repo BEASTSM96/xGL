@@ -84,6 +84,7 @@ project "xGl"
 		{
 			"pthread",
 			"dl",
+			"Dl",
 			"GL",
 			"X11"
 		}
