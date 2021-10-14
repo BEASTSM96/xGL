@@ -147,3 +147,15 @@ project "xGlRunner"
 	{
 		"xGl/src"
 	}
+
+    filter "system:liunx"
+        systemversion "latest"
+
+		links 
+		{
+			"pthread",
+			"dl",
+			"Dl",
+			"GL",
+			"X11"
+		}
