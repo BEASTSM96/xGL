@@ -3674,7 +3674,7 @@ void xGL::Terminate()
 	s_Handle = NULL;
 }
 
-#elif defined ( __LINUX__ )
+#elif defined ( __linux__ )
 
 #include <dlfcn.h>
 
