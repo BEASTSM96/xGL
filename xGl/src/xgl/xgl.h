@@ -3729,18 +3729,11 @@ void* xGL::LoadFunc( const char* name )
 	for( index = 0; index < ( sizeof( libraryNames ) / sizeof( libraryNames[ 0 ] ) ); index++ )
 	{
 		s_Handle = dlopen( libraryNames[ index ], RTLD_NOW | RTLD_GLOBAL );
-
-		if( !s_Handle )
-		{
-			void* fn = dlsym( s_Handle, name );
-
-			return fn;
-		}
-
 	}
 
-
-	return 0;
+	void* fn = dlsym( s_Handle, name );
+	
+	return fn;
 }
 
 void xGL::Terminate()
