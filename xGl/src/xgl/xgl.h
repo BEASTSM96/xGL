@@ -29,6 +29,11 @@
 #if !defined( __xgl_header__ )
 #define __xgl_header__ 1
 
+// C STD
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 // Khronos stuff
 #define __gl_glcorearb_h_ 1
 #define __gl_glext_h_     1
@@ -3617,8 +3622,60 @@ XGL_FUNCS_4_6
 #define XGL_LOAD_FUNCTION( type, name ) \
 name = (type)xGL::LoadFunc( #name );
 
+struct XGL_GL_VERSION_STRUCT { int major; int minor; };
+XGL_GL_VERSION_STRUCT GLVersion;
+
+static void FindGLVersion() 
+{
+	int i, ma, mi;
+
+	const char* version;
+	const char* prefixes[] ={
+		"OpenGL ES-CM ",
+		"OpenGL ES-CL ",
+		"OpenGL ES ",
+		NULL
+	};
+
+	printf( ( const char* )glGetString( GL_VERSION ) );
+
+	version = ( const char* )glGetString( GL_VERSION );
+	if( !version ) return;
+
+	for( i = 0; prefixes[ i ]; i++ )
+	{
+		const size_t length = strlen( prefixes[ i ] );
+		if( strncmp( version, prefixes[ i ], length ) == 0 )
+		{
+			version += length;
+			break;
+		}
+	}
+
+#ifdef _MSC_VER
+	sscanf_s( version, "%d.%d", &ma, &mi );
+#else
+	sscanf( version, "%d.%d", &ma, &mi );
+#endif
+
+	GLVersion.major = ma;
+	GLVersion.minor = mi;
+}
+
 bool xGL::LoadGL()
 {
+	GLVersion.major = 0; 
+	GLVersion.minor = 0;
+
+	// https://github.com/BEASTSM96/Saturn-Engine/blob/v2/Saturn/vendor/Glad/src/glad.c#L1805
+
+	glGetString = ( PFNGLGETSTRINGPROC )LoadFunc( "glGetString" );
+
+	if( glGetString == NULL ) return false;
+	if( glGetString( GL_VERSION ) == NULL ) return false;
+
+	FindGLVersion();
+
 	XGL_FUNCS_1_0
 	XGL_FUNCS_1_1
 	XGL_FUNCS_1_2
@@ -3637,7 +3694,7 @@ bool xGL::LoadGL()
 	XGL_FUNCS_4_5
 	XGL_FUNCS_4_6
 
-	return true;
+	return GLVersion.major != 0 || GLVersion.minor != 0;
 }
 
 #if defined ( _WIN32 )
