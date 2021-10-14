@@ -3707,7 +3707,7 @@ void xGL::Terminate()
 	}
 }
 
-#else
+#else // __linux__
 
 #warning "OpenGL was deprecated in macOS 10.14. To create high performance code on GPUs, use the Metal framework instead."
 
@@ -3732,9 +3732,6 @@ void* xGL::LoadFunc( const char* name )
 
 		if( !s_Handle )
 		{
-		#if defined(__APPLE__) || defined(__HAIKU__)
-			return 1;
-		#else
 			void* fn = dlsym( s_Handle, name );
 
 			return fn;
@@ -3755,7 +3752,7 @@ void xGL::Terminate()
 	}
 }
 
-#endif
+#endif // __APPLE__
 
 
 #endif // !__xgl_header__
