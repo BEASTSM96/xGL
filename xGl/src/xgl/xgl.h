@@ -3711,31 +3711,48 @@ void xGL::Terminate()
 
 #warning "OpenGL was deprecated in macOS 10.14. To create high performance code on GPUs, use the Metal framework instead."
 
-#import <mach-o/dyld.h>
-#import <stdlib.h>
-#import <string.h>
+#include <dlfcn.h>
+
+static void* s_Handle;
 
 void* xGL::LoadFunc( const char* name )
 {
-	NSSymbol symbol;
-	char* symbolName;
+	static const char* libraryNames[] ={
+		"../Frameworks/OpenGL.framework/OpenGL",
+		"/Library/Frameworks/OpenGL.framework/OpenGL",
+		"/System/Library/Frameworks/OpenGL.framework/OpenGL",
+		"/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL"
+	};
 
-	symbolName = malloc( strlen( name ) + 2 );
-	strcpy( symbolName + 1, name );
+	// https://github.com/BEASTSM96/Saturn-Engine/blob/v2/Saturn/vendor/Glad/src/glad.c#L101
+	unsigned int index = 0;
+	for( index = 0; index < ( sizeof( libraryNames ) / sizeof( libraryNames[ 0 ] ) ); index++ )
+	{
+		s_Handle = dlopen( libraryNames[ index ], RTLD_NOW | RTLD_GLOBAL );
 
-	symbolName[ 0 ] = '_';
-	symbol = NULL;
+		if( !s_Handle )
+		{
+		#if defined(__APPLE__) || defined(__HAIKU__)
+			return 1;
+		#else
+			void* fn = dlsym( s_Handle, name );
 
-	if( NSIsSymbolNameDefined( symbolName ) )
-		symbol = NSLookupAndBindSymbol( symbolName );
+			return fn;
+		}
 
-	free( symbolName );
+	}
 
-	return symbol ? NSAddressOfSymbol( symbol ) : NULL;
+
+	return 0;
 }
 
 void xGL::Terminate()
 {
+	if( !s_Handle )
+	{
+		dlclose( s_Handle );
+		s_Handle = NULL;
+	}
 }
 
 #endif
