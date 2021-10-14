@@ -100,7 +100,7 @@ project "xGl"
 			optimize "on"
 
 	filter "system:macosx"
-		systemversion "latest"
+		systemversion "11.0"
 
 		defines
 		{
