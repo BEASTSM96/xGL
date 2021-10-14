@@ -146,8 +146,3 @@ project "xGlRunner"
 	{
 		"xGl/src"
 	}
-
-    links
-	{
-		"xGl"
-	}
