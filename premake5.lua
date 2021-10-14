@@ -152,7 +152,7 @@ project "xGlRunner"
 	{
 	}
 
-	filter "system:liunx"
+	filter "system:linux"
 		systemversion "latest"
 
 		links {

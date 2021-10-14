@@ -23,6 +23,9 @@ jobs:
     - name: Generate Project Files
       run: ./tpremake/premake5 gmake2
 
+    - name: Update Software
+      run: softwareupdate --all --install --force
+
     - name: Make Solution
       run: make -j
 
