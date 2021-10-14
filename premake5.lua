@@ -155,10 +155,10 @@ project "xGlRunner"
 	filter "system:linux"
 		systemversion "latest"
 
-		links {
+		links
+		{
 			"pthread",
 			"dl",
-			"GL",
 			"X11"
 		}
 
