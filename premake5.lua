@@ -189,7 +189,7 @@ project "xGlRunner"
 		optimize "on"
 
 	filter "system:macosx"
-		systemversion "latest"
+		systemversion "11.2"
 
 		links {
 		}
