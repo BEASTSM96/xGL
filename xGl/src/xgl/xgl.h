@@ -3613,36 +3613,130 @@ XGL_FUNCS_4_6
 #undef XGL_LOAD_FUNCTION
 
 #define XGL_LOAD_FUNCTION( type, name ) \
-name = (type) xGL::LoadFunc( #name );   \
-if( !name )                             \
-{                                       \
-}                                       \
+name = (type)xGL::LoadFunc( #name );
 
-namespace xGL {
+bool xGL::LoadGL()
+{
+	XGL_FUNCS_1_0
+	XGL_FUNCS_1_1
+	XGL_FUNCS_1_2
+	XGL_FUNCS_1_3
+	XGL_FUNCS_1_4
+	XGL_FUNCS_2_0
+	XGL_FUNCS_2_1
+	XGL_FUNCS_3_0
+	XGL_FUNCS_3_1
+	XGL_FUNCS_3_2
+	XGL_FUNCS_3_3
+	XGL_FUNCS_4_1
+	XGL_FUNCS_4_2
+	XGL_FUNCS_4_3
+	XGL_FUNCS_4_4
+	XGL_FUNCS_4_5
+	XGL_FUNCS_4_6
 
-	bool LoadGL() 
-	{
-		XGL_FUNCS_1_0
-		XGL_FUNCS_1_1
-		XGL_FUNCS_1_2
-		XGL_FUNCS_1_3
-		XGL_FUNCS_1_4
-		XGL_FUNCS_2_0
-		XGL_FUNCS_2_1
-		XGL_FUNCS_3_0
-		XGL_FUNCS_3_1
-		XGL_FUNCS_3_2
-		XGL_FUNCS_3_3
-		XGL_FUNCS_4_1
-		XGL_FUNCS_4_2
-		XGL_FUNCS_4_3
-		XGL_FUNCS_4_4
-		XGL_FUNCS_4_5
-		XGL_FUNCS_4_6
-	}
-
+	return true;
 }
 
-#undef XGL_LOAD_FUNCTION
+#if defined ( _WIN32 )
+
+static HMODULE s_Handle = NULL;
+
+typedef PROC( *PFNwglGetProcAddress )( LPCSTR args );
+
+void* xGL::LoadFunc( const char* name )
+{
+	static PFNwglGetProcAddress wglGetProcAddress = NULL;
+
+	if( !s_Handle )
+	{
+		s_Handle = LoadLibraryA( "opengl32.dll" );
+		wglGetProcAddress = ( PFNwglGetProcAddress )GetProcAddress( s_Handle, "wglGetProcAddress" );
+	}
+
+	// https://www.khronos.org/opengl/wiki/Load_OpenGL_Functions
+
+	void* func = ( void* )wglGetProcAddress( name );
+	if( func == 0 ||
+	  ( func == ( void* )0x1 ) || ( func == ( void* )0x2 ) || ( func == ( void* )0x3 ) ||
+	  ( func == ( void* )-1 ) )
+	{
+		HMODULE module = LoadLibraryA( "opengl32.dll" );
+		func = ( void* )GetProcAddress( s_Handle, name );
+	}
+
+	return func;
+}
+
+void xGL::Terminate()
+{
+	FreeLibrary( s_Handle );
+	s_Handle = NULL;
+}
+
+#elif defined ( __LINUX__ )
+
+#include <dlfcn.h>
+
+static void* s_Handle = XGL_EMPTY;
+
+void* xGL::LoadFunc( const char* name )
+{
+	if( !s_Handle )
+	{
+		s_Handle = dlopen( " libGL.so.1", RTLD_LAZY | RTLD_LOCAL );
+		if( !s_Handle )
+		{
+			s_Handle = dlopen( " libGL.so", RTLD_LAZY | RTLD_LOCAL );
+		}
+	}
+
+	void* func = dlsym( s_Handle, name );
+
+	return func;
+}
+
+void xGL::Terminate()
+{
+	if( s_Handle )
+	{
+		dlclose( s_Handle );
+		s_Handle = NULL;
+	}
+}
+
+#else
+
+#warning "OpenGL was deprecated in macOS 10.14. To create high performance code on GPUs, use the Metal framework instead."
+
+#import <mach-o/dyld.h>
+#import <stdlib.h>
+#import <string.h>
+
+void* xGL::LoadFunc( const char* name )
+{
+	NSSymbol symbol;
+	char* symbolName;
+
+	symbolName = malloc( strlen( name ) + 2 );
+	strcpy( symbolName + 1, name );
+
+	symbolName[ 0 ] = '_';
+	symbol = NULL;
+
+	if( NSIsSymbolNameDefined( symbolName ) )
+		symbol = NSLookupAndBindSymbol( symbolName );
+
+	free( symbolName );
+
+	return symbol ? NSAddressOfSymbol( symbol ) : NULL;
+}
+
+void xGL::Terminate()
+{
+}
+
+#endif
+
 
 #endif // !__xgl_header__

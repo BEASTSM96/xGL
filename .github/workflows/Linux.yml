@@ -1,0 +1,27 @@
+name: CI(Linux)
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Generate Submodules
+      run: git submodule update --init
+
+    - name: Download Premake
+      uses: BEASTSM96/premake-action@v1.1
+
+    - name: Generate Project Files
+      run: ./tpremake/premake5 gmake2
+
+    - name: Make Solution
+      run: make -j
