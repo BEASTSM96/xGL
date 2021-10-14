@@ -1,0 +1,34 @@
+# Binaries
+**/bin/
+bin-int/
+
+# CI Premake name
+tpremake
+# User Linux name
+premake5
+
+# log files
+*.log
+
+# Visual Studio files and folder
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+
+[dD]esktop.ini
+
+**/assets/tex
+
+# Codelite files
+*.mk
+*.project
+**/.codelite/
+*.workspace
+
+.build-*/**.**
+.build-debug/
+.build-release/
+.build-rdist/
+.build-dist/

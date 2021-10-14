@@ -1,0 +1,153 @@
+workspace "OpenGL"
+	architecture "x64"
+	startproject "xGlRunner"
+	targetdir "build"
+	--warnings "On"
+
+    configurations
+	{
+		"Debug",
+		"Release"
+	}
+	
+	flags
+	{
+		"MultiProcessorCompile"
+	}
+
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+-- xGl
+-- Only for building
+project "xGl" 
+    location "xGl"
+    kind "StaticLib"
+    language "C++"
+    cppdialect "C++17"
+    staticruntime "on"
+    --warnings "On"
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+    }
+
+    defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
+
+    includedirs
+	{
+		"%{prj.name}/src"
+    }
+
+
+    filter "system:windows"
+        systemversion "latest"
+
+		defines
+		{
+			"_XGL_WIN__",
+            -- Why not lmao
+            "_XGL_WINDOWS__"
+		}
+
+        links 
+	    { 
+	    	"opengl32.lib"
+	    }
+
+        filter "configurations:Debug"
+            defines "__XGL_DEBUG__"
+            runtime "Debug"
+            symbols "on"
+
+        filter "configurations:Release"
+            defines "__XGL_RELEASE__"
+            runtime "Release"
+            optimize "on"
+
+    filter "system:liunx"
+        systemversion "latest"
+
+		defines
+		{
+			"_XGL_LINUX__"
+		}
+
+        links 
+		{
+			"pthread",
+			"dl",
+			"GL",
+			"X11"
+		}
+
+        filter "configurations:Debug"
+			defines "__XGL_DEBUG__"
+			runtime "Debug"
+			symbols "on"
+
+		filter "configurations:Release"
+			defines "__XGL_RELEASE__"
+			runtime "Release"
+			optimize "on"
+
+    filter "system:macosx"
+		systemversion "latest"
+
+		defines
+		{
+			"_XGL_MAC__"
+		}
+
+        filter "configurations:Debug"
+			defines "__XGL_DEBUG__"
+			runtime "Debug"
+			symbols "on"
+
+		filter "configurations:Release"
+			defines "__XGL_RELEASE__"
+			runtime "Release"
+			optimize "on"
+
+
+-- Test Project for running xGl
+-- Will not be included
+-- xGlRunner aka example
+project "xGlRunner"
+    location "xGlRunner"
+    kind "ConsoleApp"
+    language "C++"
+    cppdialect "C++17"
+    staticruntime "on"
+    warnings "Off"
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    defines
+    {
+        "_CRT_SECURE_NO_WARNINGS"
+    }
+
+    files
+    {
+        "%{prj.name}/src/**.h",
+        "%{prj.name}/src/**.cpp"
+    }
+
+    includedirs
+	{
+		"xGl/src"
+	}
+
+    links
+	{
+		"xGl"
+	}
