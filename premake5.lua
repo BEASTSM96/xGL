@@ -4,7 +4,7 @@ workspace "OpenGL"
 	targetdir "build"
 	--warnings "On"
 
-    configurations
+	configurations
 	{
 		"Debug",
 		"Release"
@@ -20,76 +20,49 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- xGl
 -- Only for building
 project "xGl" 
-    location "xGl"
-    kind "StaticLib"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "on"
-    --warnings "On"
+	location "xGl"
+	kind "StaticLib"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+	--warnings "On"
 
-    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    files
+	files
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
-    }
+	}
 
-    defines
+	defines
 	{
 		"_CRT_SECURE_NO_WARNINGS"
 	}
 
-    includedirs
+	includedirs
 	{
 		"%{prj.name}/src"
-    }
+	}
 
 
-    filter "system:windows"
-        systemversion "latest"
+	filter "system:windows"
+		systemversion "latest"
 
 		defines
 		{
 			"_XGL_WIN__",
-            -- Why not lmao
-            "_XGL_WINDOWS__"
+			-- Why not lmao
+			"_XGL_WINDOWS__"
 		}
 
-        links 
-	    { 
-	    	"opengl32.lib"
-	    }
-
-        filter "configurations:Debug"
-            defines "__XGL_DEBUG__"
-            runtime "Debug"
-            symbols "on"
-
-        filter "configurations:Release"
-            defines "__XGL_RELEASE__"
-            runtime "Release"
-            optimize "on"
-
-    filter "system:liunx"
-        systemversion "latest"
-
-		defines
-		{
-			"_XGL_LINUX__"
+		links 
+		{ 
+			"opengl32.lib"
 		}
 
-        links 
-		{
-			"pthread",
-			"dl",
-			"Dl",
-			"GL",
-			"X11"
-		}
-
-        filter "configurations:Debug"
+		filter "configurations:Debug"
 			defines "__XGL_DEBUG__"
 			runtime "Debug"
 			symbols "on"
@@ -99,7 +72,34 @@ project "xGl"
 			runtime "Release"
 			optimize "on"
 
-    filter "system:macosx"
+	filter "system:liunx"
+		systemversion "latest"
+
+		defines
+		{
+			"_XGL_LINUX__"
+		}
+
+		links 
+		{
+			"pthread",
+			"dl",
+			"Dl",
+			"GL",
+			"X11"
+		}
+
+		filter "configurations:Debug"
+			defines "__XGL_DEBUG__"
+			runtime "Debug"
+			symbols "on"
+
+		filter "configurations:Release"
+			defines "__XGL_RELEASE__"
+			runtime "Release"
+			optimize "on"
+
+	filter "system:macosx"
 		systemversion "latest"
 
 		defines
@@ -107,7 +107,7 @@ project "xGl"
 			"_XGL_MAC__"
 		}
 
-        filter "configurations:Debug"
+		filter "configurations:Debug"
 			defines "__XGL_DEBUG__"
 			runtime "Debug"
 			symbols "on"
@@ -122,40 +122,38 @@ project "xGl"
 -- Will not be included
 -- xGlRunner aka example
 project "xGlRunner"
-    location "xGlRunner"
-    kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "on"
-    warnings "Off"
+	location "xGlRunner"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+	warnings "Off"
 
-    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    defines
-    {
-        "_CRT_SECURE_NO_WARNINGS"
-    }
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
 
-    files
-    {
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
-    }
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
 
-    includedirs
+	includedirs
 	{
 		"xGl/src"
 	}
 
-    filter "system:liunx"
-        systemversion "latest"
+	filter "system:liunx"
+		systemversion "latest"
 
-		links 
-		{
+		links {
 			"pthread",
 			"dl",
-			"Dl",
 			"GL",
 			"X11"
 		}
