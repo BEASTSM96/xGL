@@ -24,8 +24,8 @@ jobs:
       run: ./tpremake/premake5 xcode4
 
     - name: Clean project
-      run: xcodebuild clean -workspace "OpenGL.xcworkspace" -scheme "OpenGL"
+      run: xcodebuild clean -workspace "OpenGL.xcworkspace"
 
     - name: Make Solution
-      run: xcodebuild build -workspace "OpenGL.xcworkspace" -scheme "OpenGL" -configuration Release | xcpretty -c && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -workspace "OpenGL.xcworkspace" -configuration Release | xcpretty -c && exit ${PIPESTATUS[0]}
 

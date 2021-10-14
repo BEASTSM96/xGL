@@ -156,6 +156,8 @@
 // For other compilers that dont have this: var;
 #define XGL_EMPTY ((void*)0)
 
+#define NULL 0
+
 // xGL API Func
 
 namespace xGL {
