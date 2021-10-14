@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-11
     defaults:
       run:
         shell: bash
@@ -22,9 +22,6 @@ jobs:
 
     - name: Generate Project Files
       run: ./tpremake/premake5 gmake2
-
-    - name: Update Software
-      run: softwareupdate --all --install --force
 
     - name: Make Solution
       run: make -j
