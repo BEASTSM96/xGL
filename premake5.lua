@@ -148,6 +148,10 @@ project "xGlRunner"
 		"xGl/src"
 	}
 
+	links 
+	{
+	}
+
 	filter "system:liunx"
 		systemversion "latest"
 
@@ -157,3 +161,45 @@ project "xGlRunner"
 			"GL",
 			"X11"
 		}
+
+	filter "configurations:Debug"
+		defines "DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "RELEASE"
+		runtime "Release"
+		optimize "on"
+
+	filter "system:windows"
+		systemversion "latest"
+
+		links {
+		}
+
+	filter "configurations:Debug"
+		defines "DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "RELEASE"
+		runtime "Release"
+		optimize "on"
+
+	filter "system:macosx"
+		systemversion "latest"
+
+		links {
+		}
+
+	filter "configurations:Debug"
+		defines "DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "RELEASE"
+		runtime "Release"
+		optimize "on"
