@@ -26,7 +26,7 @@
 *********************************************************************************************
 */
 
-#include "xGL.h"
+#include "xgl.h"
 
 #undef XGL_LOAD_FUNCTION
 
@@ -127,26 +127,26 @@ bool xGL::LoadGL()
 	FindGLVersion();
 
 	XGL_FUNCS_1_0
-		XGL_FUNCS_1_1
-		XGL_FUNCS_1_2
-		XGL_FUNCS_1_3
-		XGL_FUNCS_1_4
-		XGL_FUNCS_1_5
-		XGL_FUNCS_2_0
-		XGL_FUNCS_2_1
-		XGL_FUNCS_3_0
-		XGL_FUNCS_3_1
-		XGL_FUNCS_3_2
-		XGL_FUNCS_3_3
-		XGL_FUNCS_4_0
-		XGL_FUNCS_4_1
-		XGL_FUNCS_4_2
-		XGL_FUNCS_4_3
-		XGL_FUNCS_4_4
-		XGL_FUNCS_4_5
-		XGL_FUNCS_4_6
+	XGL_FUNCS_1_1
+	XGL_FUNCS_1_2
+	XGL_FUNCS_1_3
+	XGL_FUNCS_1_4
+	XGL_FUNCS_1_5
+	XGL_FUNCS_2_0
+	XGL_FUNCS_2_1
+	XGL_FUNCS_3_0
+	XGL_FUNCS_3_1
+	XGL_FUNCS_3_2
+	XGL_FUNCS_3_3
+	XGL_FUNCS_4_0
+	XGL_FUNCS_4_1
+	XGL_FUNCS_4_2
+	XGL_FUNCS_4_3
+	XGL_FUNCS_4_4
+	XGL_FUNCS_4_5
+	XGL_FUNCS_4_6
 
-		return GLVersion.major != 0 || GLVersion.minor != 0;
+	return GLVersion.major != 0 || GLVersion.minor != 0;
 }
 
 #if defined ( _WIN32 )
