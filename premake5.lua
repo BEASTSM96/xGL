@@ -17,6 +17,11 @@ workspace "OpenGL"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "third-party/glfw/include"
+
+include "third-party/glfw"
+
 -- xGl
 -- Only for building
 project "xGl" 
@@ -46,7 +51,6 @@ project "xGl"
 		"%{prj.name}/src"
 	}
 
-
 	filter "system:windows"
 		systemversion "latest"
 
@@ -63,7 +67,7 @@ project "xGl"
 		}
 
 		filter "configurations:Debug"
-			defines "__XGL_DEBUG__"
+			defines { "__XGL_DEBUG__", "XGL_ASSERTS" }
 			runtime "Debug"
 			symbols "on"
 
@@ -90,7 +94,7 @@ project "xGl"
 		}
 
 		filter "configurations:Debug"
-			defines "__XGL_DEBUG__"
+			defines { "__XGL_DEBUG__", "XGL_ASSERTS" }
 			runtime "Debug"
 			symbols "on"
 
@@ -108,7 +112,7 @@ project "xGl"
 		}
 
 		filter "configurations:Debug"
-			defines "__XGL_DEBUG__"
+			defines { "__XGL_DEBUG__", "XGL_ASSERTS" }
 			runtime "Debug"
 			symbols "on"
 
@@ -145,11 +149,14 @@ project "xGlRunner"
 
 	includedirs
 	{
-		"xGl/src"
+		"xGl/src",
+		"%{IncludeDir.GLFW}"
 	}
 
 	links 
 	{
+		"GLFW",
+		"xGL"
 	}
 
 	filter "system:linux"
