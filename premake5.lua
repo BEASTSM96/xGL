@@ -155,7 +155,8 @@ project "xGlRunner"
 
 	links 
 	{
-		"GLFW"
+		"GLFW",
+		"xGL"
 	}
 
 	filter "system:linux"
