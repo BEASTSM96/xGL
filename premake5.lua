@@ -17,10 +17,6 @@ workspace "OpenGL"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-IncludeDir = {}
-IncludeDir["GLFW"] = "third-party/glfw/include"
-
-include "third-party/glfw"
 
 -- xGl
 -- Only for building
@@ -149,13 +145,11 @@ project "xGlRunner"
 
 	includedirs
 	{
-		"xGl/src",
-		"%{IncludeDir.GLFW}"
+		"xGl/src"
 	}
 
 	links 
 	{
-		"GLFW",
 		"xGL"
 	}
 
