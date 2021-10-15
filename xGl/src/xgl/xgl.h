@@ -173,6 +173,8 @@ namespace xGL {
 
 	extern void Terminate();
 
+	extern void FindGLVersion();
+
 	// Helper Func
 
 	extern const char* LibraryVersion() { return XGL_VERSION; }
@@ -3625,7 +3627,7 @@ name = (type)xGL::LoadFunc( #name );
 struct XGL_GL_VERSION_STRUCT { int major; int minor; };
 XGL_GL_VERSION_STRUCT GLVersion;
 
-static void FindGLVersion() 
+void xGL::FindGLVersion() 
 {
 	int i, ma, mi;
 
@@ -3786,11 +3788,16 @@ void* xGL::LoadFunc( const char* name )
 	for( index = 0; index < ( sizeof( libraryNames ) / sizeof( libraryNames[ 0 ] ) ); index++ )
 	{
 		s_Handle = dlopen( libraryNames[ index ], RTLD_NOW | RTLD_GLOBAL );
+
+		if( s_Handle != NULL )
+		{
+			void* fn = dlsym( s_Handle, name );
+
+			return fn;
+		}
 	}
 
-	void* fn = dlsym( s_Handle, name );
-	
-	return fn;
+	return 0; // Unable to find the OpenGL files
 }
 
 void xGL::Terminate()

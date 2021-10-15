@@ -32,7 +32,8 @@
 
 int main() 
 {
-	xGL::LoadGL();
+	if( !xGL::LoadGL() )
+		return 1;
 
 	while ( true )
 	{
