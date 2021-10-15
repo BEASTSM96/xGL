@@ -62,6 +62,13 @@
 #define APIENTRYP APIENTRY *
 #endif // !APIENTRYP
 
+#if defined( XGL_ASSERTS )
+#include <assert.h>
+#define XGL_ASSERT( x ) assert( x )
+#else
+#define XGL_ASSERT( x )
+#endif
+
 // GL 1.0
 #define XGL_VERSION_1_0_0 1
 #define GL_VERSION_1 XGL_VERSION_1_0_0
@@ -3639,8 +3646,6 @@ void xGL::FindGLVersion()
 		NULL
 	};
 
-	printf( ( const char* )glGetString( GL_VERSION ) );
-
 	version = ( const char* )glGetString( GL_VERSION );
 	if( !version ) return;
 
@@ -3697,6 +3702,11 @@ bool xGL::LoadGL()
 	XGL_FUNCS_4_6
 
 	return GLVersion.major != 0 || GLVersion.minor != 0;
+}
+
+void xGL::SetLogCB( XGLLOGPROC proc ) 
+{
+	LogCBProc = proc;
 }
 
 #if defined ( _WIN32 )

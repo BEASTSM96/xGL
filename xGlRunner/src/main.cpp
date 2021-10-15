@@ -29,14 +29,29 @@
 #pragma once
 
 #include <xgl/xgl.h>
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 
 int main() 
 {
+	if( glfwInit() == GL_FALSE )
+		return 1;
+
+	GLFWwindow* wind = glfwCreateWindow( 1280, 720, "xGL Example", nullptr, nullptr );
+
+	glfwMakeContextCurrent( wind );
+
 	if( !xGL::LoadGL() )
 		return 1;
 
+	glClearColor( 0.95f, 0.32f, 0.11f, 1.0f );
+
 	while ( true )
 	{
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
+		glfwSwapBuffers( wind );
+
+		glfwPollEvents();
 	}
 	
 	xGL::Terminate();
