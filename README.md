@@ -1,2 +1,2 @@
 # OpenGL-Loader
-A OpenGL loader
+An OpenGL loader
